@@ -80,28 +80,28 @@ blogsRouter.delete('/:id', tokenExtractor, userExtractor, async(req, res) => {
 })
 
 //更改博客（likes）
-blogsRouter.patch('/:id', async(req, res) => {
-  const {likes} = req.body //获取likes字段
+blogsRouter.put('/:id', async (req, res) => {
+  const { likes } = req.body
 
   if (likes === undefined) {
-    return res.status(400).json({error:'Likes value is required'}) //如果likes没有被定义，返回错误
-  } 
+    return res.status(400).json({ error: 'Likes value is required' })
+  }
 
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(
       req.params.id,
-    { likes },
-    {new: true}
+      { likes },
+      { new: true }
     )
 
     if (updatedBlog) {
       return res.json(updatedBlog)
-    }else {
-      return res.status(404).json({ error: 'Blog not found' }) // 如果博客未找到，返回 404
+    } else {
+      return res.status(404).json({ error: 'Blog not found' })
     }
   } catch (error) {
-    console.error('Error updating blog:', error) // 打印日志
-    return res.status(400).json({ error: 'Failed to update blog' }) // 返回 400 错误，表示更新失败
+    console.error('Error updating blog:', error)
+    return res.status(400).json({ error: 'Failed to update blog' })
   }
 })
 
